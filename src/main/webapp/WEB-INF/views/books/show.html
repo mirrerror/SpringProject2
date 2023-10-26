@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<p th:text="${book.getName() + ', ' + book.getYear()}">VALUE</p>
+<p th:text="${book.getBookId()}">VALUE</p>
+
+<p th:if="${book.getPersonId() <= 0}">This book is not assigned to anyone.</p>
+<form th:if="${book.getPersonId() <= 0}" th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getBookId()})}">
+    <label for="person">Assign this book to a person:</label>
+    <select th:object="${person}" th:field="*{personId}" id="person">
+        <option th:each="person: ${people}" th:value="${person.getPersonId()}"
+                th:text="${person.getFullName()}"/>
+    </select>
+    <br/>
+    <input type="submit" value="Assign to selected person"/>
+</form>
+
+<div th:if="${book.getPersonId() > 0}">
+    <th:block th:each="person : ${people}">
+        <th:block th:if="${person.personId == book.getPersonId()}">
+            <p th:text="'This book is assigned to ' + ${person.getFullName()}">VALUE</p>
+        </th:block>
+    </th:block>
+</div>
+<form th:if="${book.getPersonId() > 0}" th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getBookId()})}" th:object="${book}">
+    <input type="submit" value="Unassign the book"/>
+    <br/>
+</form>
+
+<a th:href="@{/books/{id}/edit(id=${book.getBookId()})}">Edit</a>
+
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getBookId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+</body>
+</html>
