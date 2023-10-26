@@ -43,4 +43,8 @@ public class PeopleService {
         peopleRepository.deleteById(id);
     }
 
+    public Person getPersonByFullName(String fullName) {
+        return peopleRepository.getPersonByFullName(fullName);
+    }
+
 }
