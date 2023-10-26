@@ -7,6 +7,7 @@ import md.mirrerror.utils.PersonValidator;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class PeopleController {
         return "people/index";
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         Person person = peopleService.findOne(id);
@@ -37,9 +39,6 @@ public class PeopleController {
 
         model.addAttribute("person", person);
         model.addAttribute("books", person.getTakenBooks());
-
-        System.out.println(person.getTakenBooks());
-
         return "people/show";
     }
 
