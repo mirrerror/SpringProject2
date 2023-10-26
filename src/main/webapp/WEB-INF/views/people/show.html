@@ -10,7 +10,7 @@
 <hr/>
 <p th:if="${books.isEmpty()}">The person hasn't taken any books yet.</p>
 <p th:if="${!books.isEmpty()}">Taken books:</p>
-<div th:each="book : ${books}" th:if="${!books.isEmpty()}">
+<div th:each="book : ${books}" th:if="${!person.getTakenBooks().isEmpty()}">
     <a th:href="@{/books/{id}(id=${book.getBookId()})}"
        th:text="${book.getName() + ', ' + book.getAuthor()}">book</a>
 </div>

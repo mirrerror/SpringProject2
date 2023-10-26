@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import md.mirrerror.models.Person;
 import md.mirrerror.services.PeopleService;
 import md.mirrerror.utils.PersonValidator;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +33,13 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         Person person = peopleService.findOne(id);
+        Hibernate.initialize(person.getTakenBooks());
 
         model.addAttribute("person", person);
         model.addAttribute("books", person.getTakenBooks());
+
+        System.out.println(person.getTakenBooks());
+
         return "people/show";
     }
 
