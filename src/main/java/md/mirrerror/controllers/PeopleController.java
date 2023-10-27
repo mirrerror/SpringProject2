@@ -1,6 +1,7 @@
 package md.mirrerror.controllers;
 
 import jakarta.validation.Valid;
+import md.mirrerror.models.Book;
 import md.mirrerror.models.Person;
 import md.mirrerror.services.PeopleService;
 import md.mirrerror.utils.PersonValidator;
@@ -36,6 +37,8 @@ public class PeopleController {
     public String show(@PathVariable("id") int id, Model model) {
         Person person = peopleService.findOne(id);
         Hibernate.initialize(person.getTakenBooks());
+
+        for(Book book : person.getTakenBooks()) System.out.println("exp: " + book.isExpired());
 
         model.addAttribute("person", person);
         model.addAttribute("books", person.getTakenBooks());

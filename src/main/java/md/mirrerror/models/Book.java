@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "Book")
@@ -28,17 +33,23 @@ public class Book {
     @Column(name = "year")
     private int year;
 
+    @Column(name = "taken_on")
+    @Temporal(value = TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate takenOn;
+
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
 
     public Book() {}
 
-    public Book(int bookId, String name, String author, int year, Person owner) {
+    public Book(int bookId, String name, String author, int year, LocalDate takenOn, Person owner) {
         this.bookId = bookId;
         this.name = name;
         this.author = author;
         this.year = year;
+        this.takenOn = takenOn;
         this.owner = owner;
     }
 
@@ -80,5 +91,17 @@ public class Book {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    public LocalDate getTakenOn() {
+        return takenOn;
+    }
+
+    public void setTakenOn(LocalDate takenOn) {
+        this.takenOn = takenOn;
+    }
+
+    public boolean isExpired() {
+        return ChronoUnit.DAYS.between(takenOn, LocalDate.now()) > 10;
     }
 }

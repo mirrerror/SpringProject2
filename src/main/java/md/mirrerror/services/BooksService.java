@@ -4,11 +4,11 @@ import md.mirrerror.models.Book;
 import md.mirrerror.repositories.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,6 +32,7 @@ public class BooksService {
 
     @Transactional
     public void save(Book book) {
+        book.setTakenOn(LocalDate.now());
         booksRepository.save(book);
     }
 

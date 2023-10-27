@@ -12,6 +12,7 @@
 <p th:if="${!books.isEmpty()}">Taken books:</p>
 <div th:each="book : ${books}" th:if="${!person.getTakenBooks().isEmpty()}">
     <a th:href="@{/books/{id}(id=${book.getBookId()})}"
+       th:style="${book.isExpired() ? 'color:red' : ''}"
        th:text="${book.getName() + ', ' + book.getAuthor()}">book</a>
 </div>
 <hr/>
