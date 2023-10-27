@@ -3,6 +3,9 @@ package md.mirrerror.services;
 import md.mirrerror.models.Book;
 import md.mirrerror.repositories.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +44,16 @@ public class BooksService {
     @Transactional
     public void delete(int id) {
         booksRepository.deleteById(id);
+    }
+
+    public List<Book> findAllPaginated(int page, int itemsPerPage, boolean sortByYear) {
+        return sortByYear
+                ? booksRepository.findAll(PageRequest.of(page, itemsPerPage, Sort.by("year"))).getContent()
+                : booksRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+    }
+
+    public List<Book> findAllSortedByYear() {
+        return booksRepository.findAll(Sort.by("year"));
     }
 
 }

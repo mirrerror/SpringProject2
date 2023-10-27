@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/books")
 public class BookController {
@@ -25,8 +27,19 @@ public class BookController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(@RequestParam(value = "sort_by_year", required = false) Optional<Boolean> sortByYear,
+                        @RequestParam(value = "page", required = false) Optional<Integer> page,
+                        @RequestParam(value = "books_per_page", required = false) Optional<Integer> booksPerPage,
+                        Model model) {
+
+        if(sortByYear.isPresent()) {
+            if(page.isPresent() && booksPerPage.isPresent()) model.addAttribute("books", booksService.findAllPaginated(page.get(), booksPerPage.get(), true));
+            else model.addAttribute("books", booksService.findAll());
+        } else {
+            if(page.isPresent() && booksPerPage.isPresent()) model.addAttribute("books", booksService.findAllPaginated(page.get(), booksPerPage.get(), false));
+            else model.addAttribute("books", booksService.findAll());
+        }
+
         return "books/index";
     }
 
