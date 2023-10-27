@@ -57,4 +57,8 @@ public class BooksService {
         return booksRepository.findAll(Sort.by("year"));
     }
 
+    public List<Book> findByNameStartingWith(String startingWith) {
+        return booksRepository.findByNameStartingWith(startingWith);
+    }
+
 }

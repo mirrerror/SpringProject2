@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -110,6 +112,17 @@ public class BookController {
     public String delete(@PathVariable("id") int id) {
         booksService.delete(id);
         return "redirect:/books";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "prompt", required = false) Optional<String> prompt,
+                         Model model) {
+        if(prompt.isPresent()) model.addAttribute("books", booksService.findByNameStartingWith(prompt.get()));
+        else model.addAttribute("books", Collections.emptyList());
+
+        model.addAttribute("isPromptPresent", prompt.isPresent());
+
+        return "books/search";
     }
 
 }
